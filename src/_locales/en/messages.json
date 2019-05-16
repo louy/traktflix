@@ -65,6 +65,15 @@
   "syncNow": {
     "message": "Sync now"
   },
+  "hideSynced": {
+    "message": "Hide synced"
+  },
+  "showSynced": {
+    "message": "Show synced"
+  },
+  "noItemsToShow": {
+    "message": "There are no items to show here"
+  },
   "nextPage": {
     "message": "Next page"
   },

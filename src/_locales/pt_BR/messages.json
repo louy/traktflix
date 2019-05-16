@@ -65,6 +65,15 @@
   "syncNow": {
     "message": "Sincronizar agora"
   },
+  "hideSynced": {
+    "message": "Ocultar sincronizado"
+  },
+  "showSynced": {
+    "message": "Mostrar sincronizado"
+  },
+  "noItemsToShow": {
+    "message": "Não há itens para mostrar aqui"
+  },
   "nextPage": {
     "message": "Próxima página"
   },

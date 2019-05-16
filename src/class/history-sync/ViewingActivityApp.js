@@ -12,7 +12,7 @@ import TraktWebAPIUtils from './TraktWebAPIUtils';
 
 export default class ViewingActivityApp extends React.Component {
   getInitialState() {
-    return Object.assign(this.getStateFromStores(), { pagesToLoad: this.props.pagesToLoad });
+    return Object.assign(this.getStateFromStores(), { pagesToLoad: this.props.pagesToLoad, hideSynced: false });
   }
 
   getStateFromStores() {
@@ -77,6 +77,14 @@ export default class ViewingActivityApp extends React.Component {
     }
   }
 
+  _onHideSyncedClick() {
+    this.setState({hideSynced: true});
+  }
+
+  _onShowSyncedClick() {
+    this.setState({hideSynced: false});
+  }
+
   _onToggleAll(event) {
     const inputs = Array.from(document.querySelectorAll('.mdl-list__item-secondary-action:not([style="display: none;"]) .activity-item-switch'));
     inputs.map(input => input.checked === event.target.checked ? null : input.click());
@@ -89,6 +97,14 @@ export default class ViewingActivityApp extends React.Component {
 
   render() {
     let content;
+
+    let activities = this.state.activities
+
+    if (this.state.hideSynced && activities.length) {
+      activities = activities.filter(
+        activity => !activity.alreadyOnTrakt
+      )
+    }
 
     if (this.state.loading) {
       content = (
@@ -111,7 +127,11 @@ export default class ViewingActivityApp extends React.Component {
             </label>
           </span>
           <TmdbImageContainer>
-            <ActivityList activities={this.state.activities}/>
+            {activities.length ? (
+              <ActivityList activities={activities}/>
+            ) : (
+              <h4>{browser.i18n.getMessage(`noItemsToShow`)}</h4>
+            )}
           </TmdbImageContainer>
           <div className='mdl-actions-wrapper'>
             <button onClick={this._onSyncClick.bind(this)} disabled={this.state.isLoadingTraktData}
@@ -124,6 +144,18 @@ export default class ViewingActivityApp extends React.Component {
                     className='mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect'>
               {browser.i18n.getMessage(`nextPage`)}
             </button>
+
+            {this.state.hideSynced ? (
+              <button onClick={this._onShowSyncedClick.bind(this)}
+                      className='mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect'>
+                {browser.i18n.getMessage(`showSynced`)}
+              </button>
+            ) : (
+              <button onClick={this._onHideSyncedClick.bind(this)}
+                      className='mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect'>
+                {browser.i18n.getMessage(`hideSynced`)}
+              </button>
+            )}
 
             <Select
               label={browser.i18n.getMessage(`pagesToLoad`)}
