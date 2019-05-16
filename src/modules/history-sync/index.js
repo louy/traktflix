@@ -10,6 +10,12 @@ import ViewingActivityApp from '../../class/history-sync/ViewingActivityApp';
 Rollbar.init();
 BrowserStorage.get(`prefs`).then(storage => {
   NetflixApiUtils.getActivities();
-  ReactDOM.render(<ViewingActivityApp pagesToLoad={(storage.prefs && storage.prefs.pagesToLoad) || `0`}/>, document.getElementById('viewing-activity-app'));
+  ReactDOM.render(
+    <ViewingActivityApp 
+      pagesToLoad={(storage.prefs && storage.prefs.pagesToLoad) || `0`} 
+      hideSynced={(storage.prefs && storage.prefs.hideSynced)}
+    />,
+    document.getElementById('viewing-activity-app')
+  );
   document.getElementById(`viewing-activity-app-title`).textContent = browser.i18n.getMessage(`historyTitle`);
 });

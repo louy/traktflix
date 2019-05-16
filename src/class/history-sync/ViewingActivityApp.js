@@ -12,7 +12,7 @@ import TraktWebAPIUtils from './TraktWebAPIUtils';
 
 export default class ViewingActivityApp extends React.Component {
   getInitialState() {
-    return Object.assign(this.getStateFromStores(), { pagesToLoad: this.props.pagesToLoad, hideSynced: false });
+    return Object.assign(this.getStateFromStores(), { pagesToLoad: this.props.pagesToLoad, hideSynced: this.props.hideSynced || false });
   }
 
   getStateFromStores() {
@@ -78,11 +78,27 @@ export default class ViewingActivityApp extends React.Component {
   }
 
   _onHideSyncedClick() {
-    this.setState({hideSynced: true});
+    let hideSynced = true;
+    BrowserStorage.get(`prefs`).then(storage => {
+      if (!storage.prefs) {
+        storage.prefs = {};
+      }
+      storage.prefs.hideSynced = hideSynced;
+      BrowserStorage.set({prefs: storage.prefs}, true);
+    });
+    this.setState({hideSynced});
   }
 
   _onShowSyncedClick() {
-    this.setState({hideSynced: false});
+    let hideSynced = false;
+    BrowserStorage.get(`prefs`).then(storage => {
+      if (!storage.prefs) {
+        storage.prefs = {};
+      }
+      storage.prefs.hideSynced = hideSynced;
+      BrowserStorage.set({prefs: storage.prefs}, true);
+    });
+    this.setState({hideSynced});
   }
 
   _onToggleAll(event) {
